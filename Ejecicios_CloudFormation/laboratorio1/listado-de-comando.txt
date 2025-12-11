@@ -1,0 +1,5 @@
+aws cloudformation create-stack --stack-name StackIAMUsuarioJson --template-body file://laboratorio1/01-iam.json --capabilities CAPABILITY_NAMED_IAM
+
+aws cloudformation update-stack --stack-name StackIAMUsuarioJson --template-body file://laboratorio1/01-iam.json --capabilities CAPABILITY_NAMED_IAM
+
+aws cloudformation delete-stack --stack-name StackIAMUsuarioJson

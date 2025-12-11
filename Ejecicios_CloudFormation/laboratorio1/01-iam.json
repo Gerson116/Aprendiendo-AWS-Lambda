@@ -1,0 +1,66 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "Author": "Gerson Santos Mateo",
+        "Description": "Template para crear un usuario IAM",
+        "Version": "1.0"
+    },
+    "Resources": {
+        "IAMUserGroot": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Guardian",
+                        "Value": "Galaxia"
+                    }
+                ],
+                "UserName": "groot"
+            }
+        },
+        "AvengersGroup": {
+            "Type" : "AWS::IAM::Group",
+            "Properties" : {
+                "GroupName": "Vengadores"
+            }
+        },
+        "UserToGroupAddition": {
+            "Type" : "AWS::IAM::UserToGroupAddition",
+            "Properties": {
+                "GroupName": "Vengadores",
+                "Users": [
+                    {
+                        "Ref": "IAMUserGroot"
+                    }
+                ]
+            }
+        },
+        "WithGreatPowerPolicy": {
+            "Type" : "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "ListAllMyBuckets",
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:Get*",
+                                "s3:List*",
+                                "s3:Describe*",
+                                "s3-object-lambda:Get*",
+                                "s3-object-lambda:List*"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "Groups": [
+                    {
+                        "Ref": "AvengersGroup"
+                    }
+                ]
+            }
+        }
+    }
+}

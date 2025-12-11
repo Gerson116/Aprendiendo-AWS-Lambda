@@ -1,0 +1,11 @@
+# Creación de un nuevo usuario
+
+aws iam create-user --user-name pepito
+
+# Ayuda para asociar política a un usuario
+
+aws iam attach-user-policy help
+
+# Asociar política a un usuario
+
+aws iam attach-user-policy --user-name pepito --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
