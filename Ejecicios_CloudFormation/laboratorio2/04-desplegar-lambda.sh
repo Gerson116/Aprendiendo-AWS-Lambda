@@ -1,0 +1,1 @@
+aws cloudformation create-stack --stack-name MovieApiLambdaFunction --template-body file://03-movie-api-lambda-function.json --capabilities CAPABILITY_NAMED_IAM
