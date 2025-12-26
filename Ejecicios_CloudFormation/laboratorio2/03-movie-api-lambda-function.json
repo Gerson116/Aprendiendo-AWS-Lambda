@@ -1,0 +1,84 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "Author": "Gerson Santos Mateo",
+        "Description": "Template para crear un bucket S3 con versionado habilitado",
+        "Version": "1.0"
+    },
+    "Resources": {
+        "MovieApiLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName": "MovieApiFunction",
+                "Runtime": "python3.13",
+                "Code": {
+                    "S3Bucket": { "Fn::Sub": "gym-system-lambda-deployments-${AWS::Region}" },
+                    "S3Key": "code.zip"
+                },
+                "Handler": "app.lambda_handler",
+                "Role": {
+                    "Fn::GetAtt": ["LambdaExecutionRole", "Arn"]
+                }
+            }
+        },
+        "LambdaExecutionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": "MovieApiLambdaExecutionRole",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "LambdaExecutionPolicy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": "arn:aws:logs:*:*:*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:GetObject",
+                                        "s3:PutObject",
+                                        "s3:DeleteObject"
+                                    ],
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::gym-system-lambda-deployments-${AWS::Region}/*" }
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "s3:ListBucket",
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::gym-system-lambda-deployments-${AWS::Region}" }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "Outputs": {
+        "MovieApiLambdaFunctionArn": {
+            "Description": "ARN de la función Lambda MovieApiFunction",
+            "Value": {
+                "Fn::GetAtt": ["MovieApiLambdaFunction", "Arn"]
+            }
+        }
+    }
+}
