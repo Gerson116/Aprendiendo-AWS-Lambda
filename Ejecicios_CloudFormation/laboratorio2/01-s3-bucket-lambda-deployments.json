@@ -1,0 +1,19 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "Author": "Gerson Santos Mateo",
+        "Description": "Template para crear un bucket S3 con versionado habilitado",
+        "Version": "1.0"
+    },
+    "Resources": {
+        "S3BucketLambdaDeployments": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": { "Fn::Sub": "gym-system-lambda-deployments-${AWS::Region}" },
+                "VersioningConfiguration": {
+                    "Status": "Enabled"
+                }
+            }
+        }
+    }
+}
