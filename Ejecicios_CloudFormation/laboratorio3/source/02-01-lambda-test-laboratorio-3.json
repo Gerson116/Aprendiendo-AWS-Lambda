@@ -1,0 +1,108 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "Author": "Gerson Santos Mateo",
+        "Description": "Template para crear una funcion Lambda de prueba con Lambda URL",
+        "Version": "1.0"
+    },
+    "Resources": {
+        "LambdaTestlaboratorio3": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName": "LambdaTestlaboratorio3",
+                "Runtime": "python3.13",
+                "Code": {
+                    "S3Bucket": { "Fn::Sub": "test-laboratorio3-lambda-deployments-${AWS::Region}" },
+                    "S3Key": "lambda_cold_start.zip"
+                },
+                "Handler": "app.lambda_handler",
+                "Role": {
+                    "Fn::GetAtt": ["LambdaExecutionRole", "Arn"]
+                }
+            }
+        },
+        "LambdaExecutionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": "TestLambda3ExecutionRole",
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyName": "LambdaExecutionPolicy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Resource": "arn:aws:logs:*:*:*"
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "s3:GetObject",
+                                        "s3:PutObject",
+                                        "s3:DeleteObject"
+                                    ],
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::test-laboratorio3-lambda-deployments-${AWS::Region}/*" }
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "s3:ListBucket",
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::test-laboratorio3-lambda-deployments-${AWS::Region}" }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "LambdaTestlaboratorio3Core": {
+            "Type": "AWS::Lambda::Url",
+            "Properties": {
+                "TargetFunctionArn": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] },
+                "AuthType": "AWS_IAM",
+                "Cors": {
+                    "AllowCredentials": false,
+                    "AllowHeaders": ["*"],
+                    "AllowMethods": ["GET"],
+                    "AllowOrigins": ["*"],
+                    "ExposeHeaders": ["*"],
+                    "MaxAge": 3600
+                }
+            }
+        },
+        "LambdaTestlaboratorio3InvokePermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "FunctionName": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] },
+                "Action": "lambda:InvokeFunctionUrl",
+                "Principal": {
+                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                },
+            "FunctionUrlAuthType": "AWS_IAM"
+            }
+        }
+    },
+    "Outputs": {
+        "LambdaTestlaboratorio3Arn": {   
+            "Description": "ARN de la función Lambda de prueba",
+            "Value": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] }
+        }
+    }
+}
