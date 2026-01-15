@@ -65,6 +65,11 @@
                                     "Effect": "Allow",
                                     "Action": "s3:ListBucket",
                                     "Resource": { "Fn::Sub": "arn:aws:s3:::test-laboratorio3-lambda-deployments-${AWS::Region}" }
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": "lambda:InvokeFunctionUrl",
+                                    "Resource": "*"
                                 }
                             ]
                         }
