@@ -81,7 +81,7 @@
             "Type": "AWS::Lambda::Url",
             "Properties": {
                 "TargetFunctionArn": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] },
-                "AuthType": "AWS_IAM",
+                "AuthType": "NONE",
                 "Cors": {
                     "AllowCredentials": false,
                     "AllowHeaders": ["*"],
@@ -91,23 +91,16 @@
                     "MaxAge": 3600
                 }
             }
-        },
-        "LambdaTestlaboratorio3InvokePermission": {
-            "Type": "AWS::Lambda::Permission",
-            "Properties": {
-                "FunctionName": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] },
-                "Action": "lambda:InvokeFunctionUrl",
-                "Principal": {
-                    "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
-                },
-            "FunctionUrlAuthType": "AWS_IAM"
-            }
         }
     },
     "Outputs": {
         "LambdaTestlaboratorio3Arn": {   
             "Description": "ARN de la función Lambda de prueba",
             "Value": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] }
+        },
+        "LambdaUrlEndpoint": {
+            "Description": "URL endpoint de la función Lambda",
+            "Value": { "Fn::GetAtt": ["LambdaTestlaboratorio3Core", "FunctionUrl"] }
         }
     }
 }

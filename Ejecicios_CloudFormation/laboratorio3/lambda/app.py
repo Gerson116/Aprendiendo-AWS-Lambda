@@ -1,5 +1,4 @@
 import json
-import jwt  # PyJWT library
 import hashlib
 import hmac
 from datetime import datetime, timedelta
@@ -8,78 +7,38 @@ from datetime import datetime, timedelta
 ingreso = 0
 
 def contador_ingreso():
+    global ingreso
     ingreso += 1
 
 contador_ingreso()
 
 def lambda_handler(event, context):
-
-    headers = event.get('headers', {})
-    auth_header = headers.get('authorization', '') or headers.get('Authorization', '')
-
-    if not is_authenticated(auth_header, event):
-        return {
-            'statusCode': 401,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'error': 'No autorizado',
-                'message': 'Token inválido o expirado'
-            })
-        }
+    global ingreso
     
-    mensaje = "Está haciendo frío, ¿no?"
-    if ingreso > 0:
-        mensaje = f"Está haciendo frío, ¿no? Esta es la vez número {ingreso} que alguien lo dice."
+    # Incrementar el contador en cada invocación
+    contador_ingreso()
+    
+    # Mensaje para cold start (primera vez que se ejecuta)
+    if ingreso == 1:
+        mensaje = "Está haciendo frío, ¿no? (Cold Start detectado)"
+    else:
+        mensaje = f"Contador actual: {ingreso} (Lambda caliente)"
 
+    print(f"Invocación número: {ingreso}")
     print(mensaje)
 
     return {
         'statusCode': 200,
-        'body': mensaje
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        'body': json.dumps({
+            'mensaje': mensaje,
+            'contador': ingreso,
+            'cold_start': ingreso == 1
+        })
     }
 
-def is_authenticated(auth_header, event):
-    """Diferentes métodos de autenticación"""
-    
-    # Opción 1: API Key simple
-    if auth_header and auth_header.startswith('Bearer '):
-        token = auth_header.replace('Bearer ', '')
-        return validate_api_key(token)
-    
-    # Opción 2: JWT Token
-    if auth_header and auth_header.startswith('JWT '):
-        token = auth_header.replace('JWT ', '')
-        return validate_jwt_token(token)
-    
-    # Opción 3: Firma personalizada
-    return validate_custom_signature(event)
-
-def validate_api_key(token):
-    """Validar API key contra lista permitida"""
-    valid_keys = [
-        'tu-api-key-secreta-1',
-        'tu-api-key-secreta-2'
-    ]
-    return token in valid_keys
-
-def validate_jwt_token(token):
-    """Validar JWT token"""
-    try:
-        secret_key = 'tu-clave-secreta-jwt'
-        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
-        
-        # Verificar expiración
-        if payload.get('exp', 0) < datetime.utcnow().timestamp():
-            return False
-            
-        return True
-    except:
-        return False
-    
-def validate_custom_signature(event):
     """Validar firma personalizada basada en timestamp + secret"""
     headers = event.get('headers', {})
     signature = headers.get('x-signature')
