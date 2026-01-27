@@ -91,6 +91,15 @@
                     "MaxAge": 3600
                 }
             }
+        },
+        "LambdaURLPublicPermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "FunctionName": { "Ref": "LambdaTestlaboratorio3" },
+                "Action": "lambda:InvokeFunctionUrl",
+                "Principal": "*",
+                "FunctionUrlAuthType": "NONE"
+            }
         }
     },
     "Outputs": {
