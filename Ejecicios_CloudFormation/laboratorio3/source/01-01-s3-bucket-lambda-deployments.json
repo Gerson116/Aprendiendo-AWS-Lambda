@@ -6,7 +6,7 @@
     "Version": "1.0"
   },
   "Resources": {
-    "S3BucketLambdaDeployments": {
+    "S3BucketLambdaColdStart": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {

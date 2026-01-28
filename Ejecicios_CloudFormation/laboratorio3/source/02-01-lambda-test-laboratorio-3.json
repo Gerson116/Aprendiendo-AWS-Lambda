@@ -10,10 +10,10 @@
             "Type": "AWS::Lambda::Function",
             "Properties": {
                 "FunctionName": "LambdaTestlaboratorio3",
-                "Runtime": "python3.13",
+                "Runtime": "python3.12",
                 "Code": {
                     "S3Bucket": { "Fn::Sub": "test-laboratorio3-lambda-deployments-${AWS::Region}" },
-                    "S3Key": "lambda_cold_start.zip"
+                    "S3Key": "lambda_cold_start_v2.zip"
                 },
                 "Handler": "app.lambda_handler",
                 "Role": {

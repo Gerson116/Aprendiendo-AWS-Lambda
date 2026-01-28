@@ -1,6 +1,11 @@
-# paso 1: Crear el bucket S3
-aws cloudformation create-stack --stack-name S3BucketLambdaDeployments --template-body file://01-01-s3-bucket-lambda-deployments.json
+#   Crear el bucket S3
+aws cloudformation create-stack --stack-name S3BucketLambdaColdStart --template-body file://01-01-s3-bucket-lambda-deployments.json
 
+#   Actualizar bucket
+aws cloudformation update-stack --stack-name S3BucketLambdaColdStart --template-body file://01-01-s3-bucket-lambda-deployments.json
 
-# paso 2: Subir el código
-aws s3 cp lambda_cold_start.zip s3://test-laboratorio3-lambda-deployments-us-east-1/
+#   Comprimir carpeta lambda
+tar -a -c -f lambda_cold_start_v2.zip app.py
+
+#   Subir el código
+aws s3 cp lambda_cold_start_v2.zip s3://test-laboratorio3-lambda-deployments-us-east-1/
