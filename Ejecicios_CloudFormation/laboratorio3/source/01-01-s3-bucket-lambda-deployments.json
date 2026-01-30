@@ -1,0 +1,21 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Metadata": {
+    "Author": "Gerson Santos Mateo",
+    "Description": "Template para crear un bucket S3 con versionado habilitado",
+    "Version": "1.0"
+  },
+  "Resources": {
+    "S3BucketNewLambdaColdStart": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": {
+          "Fn::Sub": "${AWS::StackName}-lambda-deployments-${AWS::Region}-${AWS::AccountId}"
+        },
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        }
+      }
+    }
+  }
+}

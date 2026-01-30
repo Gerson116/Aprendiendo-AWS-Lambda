@@ -42,3 +42,6 @@ Thumbs.db
 # Archivos temporales
 *.tmp
 *.bak
+
+yolo*
+.venv/
