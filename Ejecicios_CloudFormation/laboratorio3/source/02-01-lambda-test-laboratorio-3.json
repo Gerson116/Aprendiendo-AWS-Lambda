@@ -6,14 +6,14 @@
         "Version": "1.0"
     },
     "Resources": {
-        "LambdaTestlaboratorio3": {
+        "LambdaTestNewlaboratorio3": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
-                "FunctionName": "LambdaTestlaboratorio3",
+                "FunctionName": "LambdaTestNewlaboratorio3",
                 "Runtime": "python3.12",
                 "Code": {
-                    "S3Bucket": { "Fn::Sub": "test-laboratorio3-lambda-deployments-${AWS::Region}" },
-                    "S3Key": "lambda_cold_start_v2.zip"
+                    "S3Bucket": { "Fn::Sub": "s3-lambda-cold-start-lambda-deployments-${AWS::Region}-${AWS::AccountId}" },
+                    "S3Key": "lambda_cold_start_v3.zip"
                 },
                 "Handler": "app.lambda_handler",
                 "Role": {
@@ -59,12 +59,12 @@
                                         "s3:PutObject",
                                         "s3:DeleteObject"
                                     ],
-                                    "Resource": { "Fn::Sub": "arn:aws:s3:::test-laboratorio3-lambda-deployments-${AWS::Region}/*" }
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::s3-lambda-cold-start-lambda-deployments-${AWS::Region}-${AWS::AccountId}/*" }
                                 },
                                 {
                                     "Effect": "Allow",
                                     "Action": "s3:ListBucket",
-                                    "Resource": { "Fn::Sub": "arn:aws:s3:::test-laboratorio3-lambda-deployments-${AWS::Region}" }
+                                    "Resource": { "Fn::Sub": "arn:aws:s3:::s3-lambda-cold-start-lambda-deployments-${AWS::Region}-${AWS::AccountId}" }
                                 },
                                 {
                                     "Effect": "Allow",
@@ -77,10 +77,10 @@
                 ]
             }
         },
-        "LambdaTestlaboratorio3Core": {
+        "LambdaTestNewlaboratorio3Core": {
             "Type": "AWS::Lambda::Url",
             "Properties": {
-                "TargetFunctionArn": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] },
+                "TargetFunctionArn": { "Fn::GetAtt": ["LambdaTestNewlaboratorio3", "Arn"] },
                 "AuthType": "NONE",
                 "Cors": {
                     "AllowCredentials": false,
@@ -95,7 +95,7 @@
         "LambdaURLPublicPermission": {
             "Type": "AWS::Lambda::Permission",
             "Properties": {
-                "FunctionName": { "Ref": "LambdaTestlaboratorio3" },
+                "FunctionName": { "Ref": "LambdaTestNewlaboratorio3" },
                 "Action": "lambda:InvokeFunctionUrl",
                 "Principal": "*",
                 "FunctionUrlAuthType": "NONE"
@@ -103,13 +103,13 @@
         }
     },
     "Outputs": {
-        "LambdaTestlaboratorio3Arn": {   
+        "LambdaTestNewlaboratorio3Arn": {   
             "Description": "ARN de la función Lambda de prueba",
-            "Value": { "Fn::GetAtt": ["LambdaTestlaboratorio3", "Arn"] }
+            "Value": { "Fn::GetAtt": ["LambdaTestNewlaboratorio3", "Arn"] }
         },
         "LambdaUrlEndpoint": {
             "Description": "URL endpoint de la función Lambda",
-            "Value": { "Fn::GetAtt": ["LambdaTestlaboratorio3Core", "FunctionUrl"] }
+            "Value": { "Fn::GetAtt": ["LambdaTestNewlaboratorio3Core", "FunctionUrl"] }
         }
     }
 }

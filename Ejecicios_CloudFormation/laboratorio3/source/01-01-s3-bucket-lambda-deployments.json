@@ -6,11 +6,11 @@
     "Version": "1.0"
   },
   "Resources": {
-    "S3BucketLambdaColdStart": {
+    "S3BucketNewLambdaColdStart": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {
-          "Fn::Sub": "test-laboratorio3-lambda-deployments-${AWS::Region}"
+          "Fn::Sub": "${AWS::StackName}-lambda-deployments-${AWS::Region}-${AWS::AccountId}"
         },
         "VersioningConfiguration": {
           "Status": "Enabled"
