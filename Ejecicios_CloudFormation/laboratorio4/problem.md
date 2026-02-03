@@ -9,10 +9,10 @@
 
 ## 📚 **Paso 1: Crear el bucket S3**
 
-- Crea un archivo controlador (handler) en tu lenguaje de programación que desees que contenga el código para:
-  - Definir un **contador** fuera del `lambda_handler`(o la función que definas que va a gestionar cada invocación lambda) para mantener su valor en _invocaciones calientes_.
-  - El contador aumentará en 1 por cada invocación mientras que la lambda esté caliente.
-  - Retornar el valor del contador con el mensaje "Está haciendo frío, ¿no?" si la lambda está en estado "cold start".
+- Crear un S3 que contendrá todos los zips de los lambdas y las plantillas de Open API
+- Dentro del bucket deben existir dos carpetas:
+-   **Deploy** -> contendra los zips de los lambdas
+-   **OpenAPITemplate** -> contendra los Open API template de los lambdas.
 
 ---
 
@@ -39,6 +39,40 @@
 - Agregar Open API al apigateway, para manejar los datos que serán enviados.
 
 ---
-## 📚 **Paso 6: Probar la Lambda URL**
+
+## 📚 **Paso 6: Subir el Open API al bucket**
+
+- Al crear la plantilla Open API, debo enviar la misma al S3 par areferenciarla en mi plantilla API Gateway
+
+---
+
+## 📚 **Paso 7: Probar la Lambda URL**
 - Realiza varias invocaciones a la Lambda URL creada.
 - Observa y anota el comportamiento del contador en cada invocación.
+
+
+---
+
+## 📚 **Paso 8: Hacer que el servicio se alcance desde cualquier pais usando el servicio: AWS API Gateway Deployment**
+- Investigar sobre este servicio y implementarlo
+
+---
+
+## 📚 **Paso 9: Probar la Lambda URL**
+- Realiza varias invocaciones a la Lambda URL creada.
+- Observa y anota el comportamiento del contador en cada invocación.
+
+
+---
+
+## 📚 **Paso 10: Integrar AWS Proxy**
+- Investigar sobre este servicio y implementarlo
+
+---
+
+## 📚 **Paso 11: Probar la Lambda URL**
+- Realiza varias invocaciones a la Lambda URL creada.
+- Observa y anota el comportamiento del contador en cada invocación.
+
+
+---
