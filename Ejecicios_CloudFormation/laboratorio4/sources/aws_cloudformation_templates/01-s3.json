@@ -10,7 +10,7 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": {
-          "Fn::Sub": "${AWS::StackName}-test-api-rest-${AWS::Region}-${AWS::AccountId}"
+          "Fn::Sub": "${AWS::StackName}-${AWS::Region}-${AWS::AccountId}"
         },
         "VersioningConfiguration": {
           "Status": "Enabled"
